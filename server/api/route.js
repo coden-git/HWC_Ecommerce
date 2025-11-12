@@ -12,7 +12,8 @@ const {
   addToCartSchema,
   getCartByUuidSchema,
   checkoutCartBodySchema,
-  checkoutCartParamsSchema
+  checkoutCartParamsSchema,
+  listCartsQuerySchema
 } = require('./cart/cart.validator');
 
 // Import postal modules
@@ -114,6 +115,16 @@ router.post('/cart/checkout/:uuid',
     validateRequest(checkoutCartBodySchema, 'body')
   ],
   cartController.checkoutCart
+);
+
+router.get('/cart',
+  validateRequest(listCartsQuerySchema, 'query'),
+  cartController.getCarts
+);
+
+router.get('/cart/:uuid/dispatch',
+  validateRequest(getCartByUuidSchema, 'params'),
+  cartController.dispatchCart
 );
 
 router.get('/cart/:uuid',

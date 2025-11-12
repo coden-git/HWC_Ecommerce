@@ -126,6 +126,12 @@ const cartSchema = new mongoose.Schema({
     trim: true,
     maxlength: 100
   },
+  orderNumber: {
+    type: String,
+    required: false,
+    trim: true,
+    maxlength: 100
+  },
   number: {
     type: String,
     required: false,

@@ -5,3 +5,4 @@ export { default as TermsOfService } from './TermsOfService';
 export { default as ReturnRefundPolicy } from './ReturnRefundPolicy';
 export { default as ProductDetails } from './ProductDetails';
 export { default as Cart } from './Cart';
+export { default as ShippingDashboard } from './ShippingDashboard';

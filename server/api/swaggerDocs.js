@@ -414,6 +414,29 @@ function setupSchemas() {
     required: ['success', 'message', 'data']
   });
 
+  addSchema('CartListResponse', {
+    type: 'object',
+    properties: {
+      success: { type: 'boolean', example: true },
+      message: { type: 'string', example: 'Carts retrieved successfully' },
+      data: {
+        type: 'array',
+        items: { $ref: '#/components/schemas/Cart' }
+      },
+      pagination: {
+        type: 'object',
+        properties: {
+          page: { type: 'integer', example: 1 },
+          pageSize: { type: 'integer', example: 10 },
+          total: { type: 'integer', example: 42 },
+          pages: { type: 'integer', example: 5 }
+        },
+        required: ['page', 'pageSize', 'total', 'pages']
+      }
+    },
+    required: ['success', 'message', 'data', 'pagination']
+  });
+
   // Product update request schema (all fields optional)
   addSchema('UpdateProductRequest', {
     type: 'object',
@@ -1276,6 +1299,86 @@ function setupEndpoints() {
     }
   });
 
+  // List carts endpoint
+  attachDoc('/cart', 'GET', {
+    tags: ['Cart'],
+    summary: 'List carts with filters',
+    description: 'Retrieve paginated carts with optional filters for status, date range, customer name, or phone number. Useful for administrative dashboards.',
+    parameters: [
+      {
+        name: 'status',
+        in: 'query',
+        description: 'Filter carts by status',
+        required: false,
+        schema: {
+          type: 'string',
+          enum: ['CART', 'CHECKOUT', 'PLACED', 'FAILED', 'SHIPPED']
+        }
+      },
+      {
+        name: 'startDate',
+        in: 'query',
+        description: 'Filter carts created on or after this ISO date (yyyy-mm-dd)',
+        required: false,
+        schema: { type: 'string', format: 'date' }
+      },
+      {
+        name: 'endDate',
+        in: 'query',
+        description: 'Filter carts created on or before this ISO date (yyyy-mm-dd)',
+        required: false,
+        schema: { type: 'string', format: 'date' }
+      },
+      {
+        name: 'name',
+        in: 'query',
+        description: 'Case-insensitive substring search on the customer name',
+        required: false,
+        schema: { type: 'string' }
+      },
+      {
+        name: 'phoneNumber',
+        in: 'query',
+        description: 'Case-insensitive substring search on the stored phone number',
+        required: false,
+        schema: { type: 'string' }
+      },
+      {
+        name: 'pageNumber',
+        in: 'query',
+        description: 'Page number for paginated results (defaults to 1)',
+        required: false,
+        schema: { type: 'integer', minimum: 1, default: 1 }
+      }
+    ],
+    responses: {
+      200: {
+        description: 'Carts retrieved successfully',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/CartListResponse' }
+          }
+        }
+      },
+      400: {
+        description: 'Invalid filter parameters provided',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' }
+          }
+        }
+      },
+      500: {
+        description: 'Failed to retrieve carts',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' }
+          }
+        }
+      }
+    }
+  });
+
   attachDoc('/cart/checkout/{uuid}', 'POST', {
     tags: ['Cart'],
     summary: 'Checkout cart',
@@ -1350,6 +1453,56 @@ function setupEndpoints() {
       },
       500: {
         description: 'Failed to checkout cart',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' }
+          }
+        }
+      }
+    }
+  });
+
+  attachDoc('/cart/{uuid}/dispatch', 'GET', {
+    tags: ['Cart'],
+    summary: 'Mark cart as shipped',
+    description: 'Update the cart status to SHIPPED once the order has been dispatched. Only carts in PLACED status can transition to SHIPPED.',
+    parameters: [
+      {
+        name: 'uuid',
+        in: 'path',
+        description: 'Cart UUID to dispatch',
+        required: true,
+        schema: { type: 'string', format: 'uuid' },
+        example: '5f7b2c20-4d8c-4afd-9f2b-4e439b8b8a55'
+      }
+    ],
+    responses: {
+      200: {
+        description: 'Cart marked as shipped successfully',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/CartResponse' }
+          }
+        }
+      },
+      400: {
+        description: 'Cart not in a state that permits dispatch',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' }
+          }
+        }
+      },
+      404: {
+        description: 'Cart not found',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ErrorResponse' }
+          }
+        }
+      },
+      500: {
+        description: 'Dispatch attempt failed due to server error',
         content: {
           'application/json': {
             schema: { $ref: '#/components/schemas/ErrorResponse' }

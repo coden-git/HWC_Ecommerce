@@ -1,5 +1,6 @@
 const Cart = require('./cart.model');
 const Product = require('../products/product.model');
+const Config = require('../config/config.model');
 
 /**
  * Add product to cart
@@ -185,6 +186,12 @@ const checkoutCart = async (req, res) => {
     cart.shippingAddress = shippingAddress;
     cart.billingAddress = billingAddress || shippingAddress;
     cart.cartStatus = 'PLACED';
+    const config = await Config.getValue('orderId', 0);
+    cart.orderNumber = `ORD-${config + 1}`;
+    cart.name =shippingAddress?.name || '';
+    cart.number =shippingAddress?.phoneNumber || '';
+
+    await Config.setValue('orderId', config + 1);
 
     await cart.save();
 
@@ -204,8 +211,148 @@ const checkoutCart = async (req, res) => {
   }
 };
 
+/**
+ * List carts with filters
+ * @route GET /api/cart
+ * @access Public (consider securing for admin use)
+ */
+const getCarts = async (req, res) => {
+  try {
+    const {
+      status,
+      startDate,
+      endDate,
+      name,
+      phoneNumber,
+      pageNumber,
+    } = req.query;
+
+    const page = Number(pageNumber) || 1;
+    const PAGE_SIZE = 10;
+
+    const filters = {};
+
+    if (status) {
+      filters.cartStatus = status;
+    }
+
+    if (startDate || endDate) {
+      filters.createdAt = {};
+
+      if (startDate) {
+        filters.createdAt.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        filters.createdAt.$lte = end;
+      }
+    }
+
+    if (name) {
+      filters.name = { $regex: name, $options: 'i' };
+    }
+
+    if (phoneNumber) {
+      filters.number = { $regex: phoneNumber, $options: 'i' };
+    }
+
+    const skip = (page - 1) * PAGE_SIZE;
+
+    const [carts, total] = await Promise.all([
+      Cart.find(filters)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(PAGE_SIZE),
+      Cart.countDocuments(filters),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Carts retrieved successfully',
+      data: carts,
+      pagination: {
+        page,
+        pageSize: PAGE_SIZE,
+        total,
+        pages: Math.ceil(total / PAGE_SIZE),
+      },
+    });
+  } catch (error) {
+    console.error('Get carts error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve carts',
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Mark cart as dispatched
+ * @route GET /api/cart/:uuid/dispatch
+ * @access Public (consider securing if needed)
+ */
+const dispatchCart = async (req, res) => {
+  try {
+    const { uuid } = req.params;
+
+    if (!uuid) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cart UUID is required',
+      });
+    }
+
+    const cart = await Cart.findOne({ uuid });
+
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: 'Cart not found',
+      });
+    }
+
+    if (cart.cartStatus === 'SHIPPED') {
+      return res.status(200).json({
+        success: true,
+        message: 'Cart is already marked as shipped',
+        data: cart,
+      });
+    }
+
+    if (cart.cartStatus !== 'PLACED') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cart must be in PLACED status before it can be shipped',
+      });
+    }
+
+    cart.cartStatus = 'SHIPPED';
+    await cart.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Cart status updated to SHIPPED',
+      data: cart,
+    });
+  } catch (error) {
+    console.error('Dispatch cart error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to dispatch cart',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   addToCart,
   getCartByUuid,
   checkoutCart,
+  getCarts,
+  dispatchCart,
 };

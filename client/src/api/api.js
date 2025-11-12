@@ -97,6 +97,46 @@ export const fetchCartByUuid = async (uuid) => {
   return response.data;
 };
 
+export const fetchCarts = async ({
+  status,
+  startDate,
+  endDate,
+  name,
+  phoneNumber,
+  pageNumber = 1,
+} = {}) => {
+  const apiUrl = getApiBaseUrl();
+
+  const params = {
+    status,
+    startDate,
+    endDate,
+    name,
+    phoneNumber,
+    pageNumber,
+  };
+
+  Object.keys(params).forEach((key) => {
+    const value = params[key];
+    if (value === undefined || value === null || value === '') {
+      delete params[key];
+    }
+  });
+
+  const response = await axios.get(`${apiUrl}/cart`, { params });
+  return response.data;
+};
+
+export const dispatchCart = async (uuid) => {
+  if (!uuid) {
+    throw new Error('Cart UUID is required for dispatch');
+  }
+
+  const apiUrl = getApiBaseUrl();
+  const response = await axios.get(`${apiUrl}/cart/${uuid}/dispatch`);
+  return response.data;
+};
+
 const formatAddressPayload = (address = {}) => {
   if (!address) {
     return undefined;

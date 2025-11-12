@@ -1,5 +1,7 @@
 const Joi = require('joi');
 
+const cartStatusValues = ['CART', 'CHECKOUT', 'PLACED', 'FAILED', 'SHIPPED'];
+
 // Add to cart validation schema
 const addToCartSchema = Joi.object({
   uuid: Joi.string()
@@ -84,9 +86,29 @@ const checkoutCartParamsSchema = Joi.object({
     }),
 });
 
+const listCartsQuerySchema = Joi.object({
+  status: Joi.string()
+    .valid(...cartStatusValues)
+    .messages({
+      'any.only': `Status must be one of: ${cartStatusValues.join(', ')}`,
+    }),
+  startDate: Joi.date().iso(),
+  endDate: Joi.date().iso().min(Joi.ref('startDate')).messages({
+    'date.min': 'endDate cannot be before startDate',
+  }),
+  name: Joi.string().trim().max(100),
+  phoneNumber: Joi.string().trim().max(20),
+  pageNumber: Joi.number().integer().min(1).default(1).messages({
+    'number.base': 'pageNumber must be a number',
+    'number.integer': 'pageNumber must be an integer',
+    'number.min': 'pageNumber must be at least 1',
+  }),
+});
+
 module.exports = {
   addToCartSchema,
   getCartByUuidSchema,
   checkoutCartBodySchema,
   checkoutCartParamsSchema,
+  listCartsQuerySchema,
 };
