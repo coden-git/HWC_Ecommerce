@@ -136,12 +136,12 @@ const cartSchema = new mongoose.Schema({
     type: String,
     required: false,
     trim: true,
-    validate: {
-      validator: function(v) {
-        return /^[6-9]\d{9}$/.test(v); // Indian mobile number format
-      },
-      message: 'Number must be a valid 10-digit Indian mobile number'
-    }
+    // validate: {
+    //   validator: function(v) {
+    //     return /^[6-9]\d{9}$/.test(v); // Indian mobile number format
+    //   },
+    //   message: 'Number must be a valid 10-digit Indian mobile number'
+    // }
   },
   shippingAddress: {
     type: addressSchema,
