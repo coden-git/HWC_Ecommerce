@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ProductCard } from '../index';
 import { fetchTopSellingProducts, fetchCartByUuid, getStoredCartUuid } from '../../api/api';
+import TopSellingSkeleton from './TopSellingSkeleton';
 
 const TopSelling = () => {
   const [products, setProducts] = useState([]);
@@ -69,19 +70,7 @@ const TopSelling = () => {
   }, []);
 
   if (loading) {
-    return (
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
-            Top Selling
-          </h2>
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <span className="ml-3 text-lg text-gray-600">Loading products...</span>
-          </div>
-        </div>
-      </section>
-    );
+    return <TopSellingSkeleton />;
   }
 
   if (error) {

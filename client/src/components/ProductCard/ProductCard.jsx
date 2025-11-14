@@ -170,16 +170,16 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
   return (
     <div 
       key={product.uuid} 
-      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group animate-fade-in-up cursor-pointer"
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group animate-fade-in-up cursor-pointer"
+      style={{ animationDelay: `${index * 0.05}s` }}
       onClick={handleProductClick}
     >
       {/* Product Image Container */}
-      <div className="relative overflow-hidden bg-gray-100 aspect-video">
+      <div className="relative overflow-hidden bg-gray-100 aspect-w-16 aspect-h-9">
         <img 
           src={product.primaryImage} 
           alt={product.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-in-out"
           onError={(e) => {
             e.target.src = '/placeholder-product.jpg';
           }}
@@ -187,39 +187,39 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
         
         {/* Discount Badge */}
         {discountPercentage > 0 && (
-          <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-semibold z-10">
+          <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1.5 rounded-full text-xs font-bold z-10 shadow-md">
             {discountPercentage}% OFF
           </div>
         )}
         
         {/* Highlight Badge */}
         {product.highlighterText && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white px-2 py-1 rounded-full text-xs font-semibold max-w-24 text-center line-clamp-2 z-10">
+          <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white px-3 py-1.5 rounded-full text-xs font-bold max-w-24 text-center shadow-md line-clamp-2 z-10">
             {product.highlighterText}
           </div>
         )}
       </div>
 
       {/* Product Info */}
-      <div className="p-3">
+      <div className="p-4">
         {/* Title */}
-        <h3 className="text-base font-semibold text-gray-900 mb-1 line-clamp-2 min-h-[2.5rem]">
+        <h3 className="text-md font-bold text-gray-800 mb-2 line-clamp-2 min-h-[2.8rem]">
           {product.title}
         </h3>
         
         {/* Pricing */}
-        <div className="mb-2">
+        <div className="mb-3">
           {product.discountedPrice ? (
-            <div className="flex items-center space-x-2">
-              <span className="text-lg font-bold text-green-600">
+            <div className="flex items-baseline space-x-2">
+              <span className="text-xl font-extrabold text-green-600">
                 {formatPrice(product.discountedPrice)}
               </span>
-              <span className="text-sm text-gray-500 line-through">
+              <span className="text-sm text-gray-400 line-through">
                 {formatPrice(product.price)}
               </span>
             </div>
           ) : (
-            <span className="text-lg font-bold text-gray-900">
+            <span className="text-xl font-extrabold text-gray-800">
               {formatPrice(product.price)}
             </span>
           )}
@@ -227,10 +227,10 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
 
         {/* Rating */}
         {product.userRating && (
-          <div className="mb-2">
-            <div className="flex items-center mb-1">
+          <div className="mb-3">
+            <div className="flex items-center">
               <div className="text-sm">{renderStars(product.userRating)}</div>
-              <span className="ml-1 text-xs text-gray-500">({product.userRating.toFixed(1)})</span>
+              <span className="ml-2 text-xs text-gray-500">({product.userRating.toFixed(1)})</span>
             </div>
           </div>
         )}
@@ -238,7 +238,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
         {/* Action Buttons */}
         {feedback && (
           <div
-            className={`text-xs font-medium mb-2 ${
+            className={`text-xs font-semibold mb-2 transition-opacity duration-300 ${
               feedback.type === 'success' ? 'text-green-600' : 'text-red-600'
             }`}
           >
@@ -247,21 +247,21 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
         )}
 
         {cartQuantity > 0 ? (
-          <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg mb-2">
+          <div className="flex items-center justify-between bg-blue-50 border-2 border-blue-200 rounded-lg mb-2 transition-all duration-300">
             <button
               type="button"
-              className="px-3 py-2 text-blue-700 hover:bg-blue-100 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 text-blue-800 hover:bg-blue-200 rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               onClick={handleDecreaseQuantity}
               disabled={isUpdatingCart || cartQuantity <= 1}
             >
               −
             </button>
-            <span className="px-4 py-2 text-sm font-semibold text-blue-700">
+            <span className="px-4 py-2 text-sm font-bold text-blue-800">
               {isUpdatingCart ? 'Updating…' : `Qty: ${cartQuantity}`}
             </span>
             <button
               type="button"
-              className="px-3 py-2 text-blue-700 hover:bg-blue-100 rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 text-blue-800 hover:bg-blue-200 rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               onClick={handleIncreaseQuantity}
               disabled={isUpdatingCart}
             >
@@ -270,7 +270,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
           </div>
         ) : (
           <button 
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg uppercase tracking-wide text-sm mb-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl uppercase tracking-wider text-sm mb-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
             onClick={handleAddToCart}
             disabled={isUpdatingCart}
           >
@@ -280,8 +280,8 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
 
         {/* Purchase Count */}
         {product.numberOfPurchases > 0 && (
-          <div className="bg-green-50 text-green-700 text-xs font-medium px-2 py-1 rounded-full text-center">
-            {product.numberOfPurchases} bought
+          <div className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full text-center mt-2">
+            {product.numberOfPurchases} bought in last 24 hours
           </div>
         )}
       </div>
