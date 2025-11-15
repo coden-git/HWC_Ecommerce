@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { addProductToCart, fetchCartByUuid, getStoredCartUuid } from '../api/api';
+import { addProductToCart, fetchCartByUuid, getStoredCartUuid, fetchProductDetails } from '../api/api';
 import { Breadcrumb } from '../components';
 
 const ProductDetails = () => {
@@ -39,7 +38,7 @@ const ProductDetails = () => {
   }, []);
 
   useEffect(() => {
-    fetchProductDetails();
+    fetchProduct();
   }, [identifier]);
 
   useEffect(() => {
@@ -86,13 +85,12 @@ const ProductDetails = () => {
     };
   }, [product]);
 
-  const fetchProductDetails = async () => {
+  const fetchProduct = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || '/api';
-      const response = await axios.get(`${apiUrl}/products/${identifier}`);
+      const response = await fetchProductDetails(identifier);
       
-      if (response.data.success) {
-        setProduct(response.data.data);
+      if (response.success) {
+        setProduct(response.data);
         setSelectedImage(0);
       } else {
         setError('Product not found');
@@ -471,14 +469,14 @@ const ProductDetails = () => {
               )}
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg uppercase tracking-wide disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isAddingToCart || isSyncingQuantity}
               >
                 {isAddingToCart || isSyncingQuantity ? 'Updating…' : 'Add to Cart'}
               </button>
               <button
                 onClick={handleBuyNow}
-                className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg uppercase tracking-wide disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full bg-green-50 border-2 border-green-600 text-green-600 hover:bg-green-100 font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isBuyNowLoading}
               >
                 {isBuyNowLoading ? 'Redirecting…' : 'Buy Now'}

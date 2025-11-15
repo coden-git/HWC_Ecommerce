@@ -6,6 +6,14 @@ const hasWindow = () => typeof window !== 'undefined';
 
 const getApiBaseUrl = () => import.meta.env.VITE_API_URL || '/api';
 
+// Create axios instance with default headers for ngrok
+const api = axios.create({
+  headers: {
+    'ngrok-skip-browser-warning': 'true',
+    'Content-Type': 'application/json',
+  },
+});
+
 export const getStoredCartUuid = () => {
   if (!hasWindow()) {
     return null;
@@ -65,7 +73,7 @@ export const addProductToCart = async ({ productId, quantity = 1 }) => {
     payload.uuid = uuid;
   }
 
-  const response = await axios.post(`${apiUrl}/cart/add`, payload);
+  const response = await api.post(`${apiUrl}/cart/add`, payload);
   const { data } = response;
 
   if (data?.success && data?.data?.cartUuid) {
@@ -77,7 +85,7 @@ export const addProductToCart = async ({ productId, quantity = 1 }) => {
 
 export const fetchTopSellingProducts = async ({ limit = 8 } = {}) => {
   const apiUrl = getApiBaseUrl();
-  const response = await axios.get(`${apiUrl}/products/top-selling`, {
+  const response = await api.get(`${apiUrl}/products/top-selling`, {
     params: {
       limit,
     },
@@ -92,7 +100,7 @@ export const fetchCartByUuid = async (uuid) => {
   }
 
   const apiUrl = getApiBaseUrl();
-  const response = await axios.get(`${apiUrl}/cart/${uuid}`);
+  const response = await api.get(`${apiUrl}/cart/${uuid}`);
 
   return response.data;
 };
@@ -123,7 +131,7 @@ export const fetchCarts = async ({
     }
   });
 
-  const response = await axios.get(`${apiUrl}/cart`, { params });
+  const response = await api.get(`${apiUrl}/cart`, { params });
   return response.data;
 };
 
@@ -133,7 +141,7 @@ export const dispatchCart = async (uuid) => {
   }
 
   const apiUrl = getApiBaseUrl();
-  const response = await axios.get(`${apiUrl}/cart/${uuid}/dispatch`);
+  const response = await api.get(`${apiUrl}/cart/${uuid}/dispatch`);
   return response.data;
 };
 
@@ -181,7 +189,7 @@ export const checkoutCart = async (uuid, { shippingAddress, billingAddress } = {
     payload.billingAddress = formatAddressPayload(billingAddress);
   }
 
-  const response = await axios.post(`${apiUrl}/cart/checkout/${uuid}`, payload);
+  const response = await api.post(`${apiUrl}/cart/checkout/${uuid}`, payload);
   const { data } = response;
 
   if (data?.success) {
@@ -197,7 +205,18 @@ export const lookupLocationByPincode = async (pincode) => {
   }
 
   const apiUrl = getApiBaseUrl();
-  const response = await axios.get(`${apiUrl}/postal/pincode/${pincode}`);
+  const response = await api.get(`${apiUrl}/postal/pincode/${pincode}`);
+
+  return response.data;
+};
+
+export const fetchProductDetails = async (identifier) => {
+  if (!identifier) {
+    throw new Error('Product identifier is required');
+  }
+
+  const apiUrl = getApiBaseUrl();
+  const response = await api.get(`${apiUrl}/products/${identifier}`);
 
   return response.data;
 };

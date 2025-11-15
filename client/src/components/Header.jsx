@@ -55,11 +55,11 @@ const Header = () => {
             <Link to="/" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
               Home
             </Link>
-            <Link to="/privacy-policy" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
-              Privacy Policy
+            <Link to="/products" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+              Products
             </Link>
-            <Link to="/terms-of-service" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
-              Terms of Service
+            <Link to="/top-selling" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+              Top Selling
             </Link>
           </nav>
         </div>
@@ -68,8 +68,8 @@ const Header = () => {
         <div className={`transition-all duration-300 ease-in-out md:hidden ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
           <nav className="py-2">
             <Link to="/" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Home</Link>
-            <Link to="/privacy-policy" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Privacy Policy</Link>
-            <Link to="/terms-of-service" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Terms of Service</Link>
+            <Link to="/products" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Products</Link>
+            <Link to="/top-selling" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Top Selling</Link>
           </nav>
         </div>
       </div>

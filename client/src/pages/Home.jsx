@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, TopSelling } from '../components';
-import Logo from '../components/Logo';
+import drLathashekarImage from '../assets/Dr lathashekar image.png';
 
 const Home = () => {
   return (
@@ -8,10 +8,14 @@ const Home = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div className="container mx-auto px-4 py-20 relative z-10">
+        <div className="container mx-auto px-4 pt-4 pb-8 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="flex justify-center mb-6">
-              <Logo className="w-48 h-auto"/>
+            <div className="flex justify-center mb-2">
+              <img 
+                src={drLathashekarImage} 
+                alt="Dr Lathashekar" 
+                className="w-72 h-auto rounded-lg"
+              />
             </div>
             <p className="text-xl md:text-2xl opacity-90 mb-8 leading-relaxed">
               Your journey to better health starts here
