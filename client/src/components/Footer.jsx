@@ -43,7 +43,7 @@ const Footer = () => {
             <ul className="space-y-2 text-green-200">
               <li><button onClick={() => handleNavigation('/about')} className="hover:text-white transition-colors text-left">About Us</button></li>
               <li><button onClick={() => handleNavigation('/products')} className="hover:text-white transition-colors text-left">Products</button></li>
-              <li><a href="https://www.drlathashekhar.com/blog.php" className="hover:text-white transition-colors">Blog</a></li>
+              {/* <li><a href="https://www.drlathashekhar.com/blog.php" className="hover:text-white transition-colors">Blog</a></li> */}
               <li><button onClick={() => handleNavigation('/contact')} className="hover:text-white transition-colors text-left">Contact</button></li>
             </ul>
           </div>
@@ -61,11 +61,11 @@ const Footer = () => {
                   Terms of Service
                 </button>
               </li>
-              <li>
+              {/* <li>
                 <button onClick={() => handleNavigation('/shipping-policy')} className="hover:text-white transition-colors text-left">
                   Shipping Policy
                 </button>
-              </li>
+              </li> */}
               <li>
                 <button onClick={() => handleNavigation('/return-refund-policy')} className="hover:text-white transition-colors text-left">
                   Return Policy
