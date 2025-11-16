@@ -241,9 +241,121 @@ const ReturnRefundPolicy = () => {
               </div>
             </section>
 
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold text-wellness-700 mb-4 border-b-2 border-wellness-500 pb-2">
+                9. Replacement and Exchange Policy
+              </h2>
+              <div className="bg-red-50 border border-red-200 p-6 rounded-lg mb-6">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center text-lg font-bold mt-1">
+                    !
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-red-700 mb-2">Important Notice</h3>
+                    <p className="text-red-700 font-medium">
+                      Replacement and exchange services are not applicable for our wellness products.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-wellness-600 mb-3">9.1. No Product Exchanges:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>We do not offer product exchanges for different sizes, flavors, or formulations</li>
+                    <li>Customers cannot exchange one wellness product for another</li>
+                    <li>Special requests for product substitutions are not accommodated</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-wellness-600 mb-3">9.3. Reason for This Policy:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Maintains the highest hygiene and safety standards for health products</li>
+                    <li>Ensures product integrity and authenticity</li>
+                    <li>Complies with health and safety regulations for consumable wellness products</li>
+                    <li>Prevents contamination and maintains quality control</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-wellness-100 border-l-4 border-wellness-500 p-4 rounded-r-lg mt-6">
+                <p className="text-wellness-800 text-sm">
+                  <strong>Alternative Solutions:</strong> While we cannot offer exchanges or replacements except for manufacturing defects, 
+                  our customer service team is available to help address any concerns about product selection, 
+                  usage guidance, or finding the most suitable wellness products for your needs before purchase.
+                </p>
+              </div>
+            </section>
+
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold text-wellness-700 mb-4 border-b-2 border-wellness-500 pb-2">
+                10. Shipping Policy
+              </h2>
+              <p className="text-gray-700 mb-4">
+                For detailed information about our shipping procedures, delivery timelines, and shipping charges, 
+                please refer to our comprehensive shipping policy outlined below:
+              </p>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-wellness-600 mb-3">10.1. Shipping Areas:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>We ship to all major cities and towns across India</li>
+                    <li>Coverage includes metro cities, tier-2 cities, and most tier-3 locations</li>
+                    <li>Rural areas may have extended delivery times</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-wellness-600 mb-3">10.2. Delivery Timeframes:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Metro Cities: 2-4 business days (standard delivery)</li>
+                    <li>Other Cities: 4-7 business days</li>
+                    <li>Remote locations: 7-10 business days</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-wellness-600 mb-3">10.3. Shipping Charges:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Free shipping on orders above ₹999</li>
+                    <li>₹50 flat shipping rate for orders below ₹999</li>
+                    <li>Express delivery: ₹150 additional charge (select metro cities)</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-wellness-600 mb-3">10.4. Order Processing:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>All orders processed within 1-2 business days</li>
+                    <li>Quality check performed before packaging</li>
+                    <li>Tracking information provided via email and SMS</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-wellness-600 mb-3">10.5. Special Handling:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                    <li>Temperature-sensitive products shipped with appropriate controls</li>
+                    <li>Fragile items receive extra padding and insurance</li>
+                    <li>Special insulated packaging for heat-sensitive wellness products</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-wellness-100 border-l-4 border-wellness-500 p-4 rounded-r-lg mt-6">
+                <p className="text-wellness-800 text-sm">
+                  <strong>Note:</strong> Delivery times may vary due to weather conditions, holidays, or unforeseen circumstances. 
+                  For complete shipping policy details, please visit our dedicated Shipping Policy page.
+                </p>
+              </div>
+            </section>
+
             <section>
               <h2 className="text-2xl font-bold text-wellness-700 mb-4 border-b-2 border-wellness-500 pb-2">
-                9. Policy Updates
+                11. Policy Updates
               </h2>
               <p className="text-gray-700 leading-relaxed">
                 We reserve the right to update this Return and Refund Policy at any time. Any changes will 
@@ -251,6 +363,7 @@ const ReturnRefundPolicy = () => {
                 policy periodically to stay informed about our return and refund procedures.
               </p>
             </section>
+
           </div>
         </div>
       </div>

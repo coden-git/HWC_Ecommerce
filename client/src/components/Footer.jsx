@@ -26,7 +26,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <span className="text-2xl"><Logo/></span>
-              <span className="text-xl font-bold">Dr Lathshekar Wellness</span>
+              <span className="text-xl font-bold">Dr Lathshekar Holistic wellness private limited</span>
             </div>
             <p className="text-green-100 mb-4 leading-relaxed">
               Your trusted partner in wellness. We provide premium health products and expert guidance 
@@ -41,10 +41,10 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-green-200">
-              <li><a href="https://www.drlathashekhar.com/profile.php" className="hover:text-white transition-colors">About Us</a></li>
+              <li><button onClick={() => handleNavigation('/about')} className="hover:text-white transition-colors text-left">About Us</button></li>
               <li><button onClick={() => handleNavigation('/products')} className="hover:text-white transition-colors text-left">Products</button></li>
               <li><a href="https://www.drlathashekhar.com/blog.php" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="https://www.drlathashekhar.com/contact.php" className="hover:text-white transition-colors">Contact</a></li>
+              <li><button onClick={() => handleNavigation('/contact')} className="hover:text-white transition-colors text-left">Contact</button></li>
             </ul>
           </div>
           

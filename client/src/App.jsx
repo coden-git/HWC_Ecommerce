@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Home, Products, PrivacyPolicy, TermsOfService, ReturnRefundPolicy, ShippingPolicy, ProductDetails, Cart, ShippingDashboard } from './pages'
+import { Home, Products, PrivacyPolicy, TermsOfService, ReturnRefundPolicy, ShippingPolicy, AboutUs, Contact, ProductDetails, Cart, ShippingDashboard } from './pages'
 import { Header, Footer } from './components'
 
 function App() {
@@ -14,6 +14,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:identifier" element={<ProductDetails />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/return-refund-policy" element={<ReturnRefundPolicy />} />

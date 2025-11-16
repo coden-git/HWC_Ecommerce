@@ -15,7 +15,7 @@ const ShippingPolicy = () => {
           <div className="prose prose-lg max-w-none">
             <div className="bg-wellness-100 border-l-4 border-wellness-500 p-6 rounded-r-lg mb-8">
               <p className="text-wellness-800 font-medium leading-relaxed m-0">
-                At Dr Lathashekhar Holistic Wellness Center, we are committed to delivering your wellness products 
+                At Dr Lathashekhar Holistic Wellness private limited, we are committed to delivering your wellness products 
                 safely and efficiently. This Shipping Policy outlines our shipping procedures, delivery timelines, 
                 and important information regarding the shipment of your orders.
               </p>
