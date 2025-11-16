@@ -1,12 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import { useCart } from '../hooks/useCart';
-import { preserveCartId } from '../utils/navigation';
+import { preserveCartId, navigateWithScroll } from '../utils/navigation';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cartItemCount, cartUuid } = useCart();
+  const navigate = useNavigate();
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
@@ -26,6 +27,12 @@ const Header = () => {
     return preserveCartId(path, cartUuid);
   }, [cartUuid]);
 
+  // Handle navigation with scroll to top
+  const handleNavigation = useCallback((path) => {
+    closeMenu();
+    navigateWithScroll(navigate, path, cartUuid);
+  }, [navigate, cartUuid, closeMenu]);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -41,31 +48,30 @@ const Header = () => {
     <header className="bg-white/90 backdrop-blur-lg shadow-md sticky top-0 z-50 w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <Link
-            to={getNavUrl('/')}
+          <button
+            onClick={() => handleNavigation('/')}
             className="flex items-center space-x-2 text-xl font-bold text-gray-800 hover:text-green-600 transition-colors duration-300"
-            onClick={closeMenu}
           >
             <Logo className="h-12 w-auto" />
-          </Link>
+          </button>
 
           <div className="flex items-center space-x-4">
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-2">
-              <Link to={getNavUrl('/')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+              <button onClick={() => handleNavigation('/')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
                 Home
-              </Link>
-              <Link to={getNavUrl('/products')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+              </button>
+              <button onClick={() => handleNavigation('/products')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
                 Products
-              </Link>
-              {/* <Link to={getNavUrl('/top-selling')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+              </button>
+              {/* <button onClick={() => handleNavigation('/top-selling')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
                 Top Selling
-              </Link> */}
+              </button> */}
             </nav>
 
             {/* Cart Icon */}
-            <Link
-              to={getCartUrl()}
+            <button
+              onClick={() => handleNavigation('/cart')}
               className="relative p-2 text-gray-700 hover:text-green-600 transition-colors duration-300 rounded-lg hover:bg-green-50"
               aria-label="Shopping cart"
             >
@@ -88,7 +94,7 @@ const Header = () => {
                   {cartItemCount > 99 ? '99+' : cartItemCount}
                 </span>
               )}
-            </Link>
+            </button>
 
             {/* Mobile Menu Button */}
             <button
@@ -111,17 +117,17 @@ const Header = () => {
         {/* Mobile Menu */}
         <div className={`transition-all duration-300 ease-in-out md:hidden ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
           <nav className="py-2">
-            <Link to={getNavUrl('/')} className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Home</Link>
-            <Link to={getNavUrl('/products')} className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Products</Link>
-            {/* <Link to={getNavUrl('/top-selling')} className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Top Selling</Link> */}
-            <Link to={getCartUrl()} className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>
+            <button onClick={() => handleNavigation('/')} className="block w-full text-left px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">Home</button>
+            <button onClick={() => handleNavigation('/products')} className="block w-full text-left px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">Products</button>
+            {/* <button onClick={() => handleNavigation('/top-selling')} className="block w-full text-left px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">Top Selling</button> */}
+            <button onClick={() => handleNavigation('/cart')} className="flex items-center justify-between w-full px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
               <span>Cart</span>
               {cartItemCount > 0 && (
                 <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
                   {cartItemCount > 99 ? '99+' : cartItemCount}
                 </span>
               )}
-            </Link>
+            </button>
           </nav>
         </div>
       </div>

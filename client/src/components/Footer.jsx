@@ -1,16 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import InstagramIcon from './InstagramIcon';
 import FacebookIcon from './FacebookIcon';
 import YouTubeIcon from './YouTubeIcon';
-import { preserveCartId } from '../utils/navigation';
+import { preserveCartId, navigateWithScroll } from '../utils/navigation';
 import { useCart } from '../hooks/useCart';
 
 const Footer = () => {
   const { cartUuid } = useCart();
+  const navigate = useNavigate();
 
   // Helper function to preserve cart ID for internal links
   const getNavUrl = (path) => preserveCartId(path, cartUuid);
+
+  // Handle navigation with scroll to top
+  const handleNavigation = (path) => {
+    navigateWithScroll(navigate, path, cartUuid);
+  };
 
   return (
     <footer className="bg-gradient-to-r from-green-800 to-emerald-900 text-white mt-auto">
@@ -31,7 +37,7 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-green-200">
               <li><a href="https://www.drlathashekhar.com/profile.php" className="hover:text-white transition-colors">About Us</a></li>
-              <li><Link to={getNavUrl('/products')} className="hover:text-white transition-colors">Products</Link></li>
+              <li><button onClick={() => handleNavigation('/products')} className="hover:text-white transition-colors text-left">Products</button></li>
               <li><a href="https://www.drlathashekhar.com/blog.php" className="hover:text-white transition-colors">Blog</a></li>
               <li><a href="https://www.drlathashekhar.com/contact.php" className="hover:text-white transition-colors">Contact</a></li>
             </ul>
@@ -41,20 +47,20 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Legal</h3>
             <ul className="space-y-2 text-green-200">
               <li>
-                <Link to={getNavUrl('/privacy-policy')} className="hover:text-white transition-colors">
+                <button onClick={() => handleNavigation('/privacy-policy')} className="hover:text-white transition-colors text-left">
                   Privacy Policy
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to={getNavUrl('/terms-of-service')} className="hover:text-white transition-colors">
+                <button onClick={() => handleNavigation('/terms-of-service')} className="hover:text-white transition-colors text-left">
                   Terms of Service
-                </Link>
+                </button>
               </li>
               {/* <li><a href="#" className="hover:text-white transition-colors">Shipping Policy</a></li> */}
               <li>
-                <Link to={getNavUrl('/return-refund-policy')} className="hover:text-white transition-colors">
+                <button onClick={() => handleNavigation('/return-refund-policy')} className="hover:text-white transition-colors text-left">
                   Return Policy
-                </Link>
+                </button>
               </li>
             </ul>
           </div>

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { addProductToCart } from '../../api/api';
+import { scrollToTop } from '../../utils/navigation';
 
 const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) => {
   const navigate = useNavigate();
@@ -39,17 +40,23 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
   };
 
   const handleProductClick = () => {
+    // Scroll to top before navigation
+    scrollToTop();
+    
     const cartId = new URLSearchParams(location.search || '').get('cartId');
     const productIdentifier = product.uri || product.uuid;
 
-    if (cartId) {
-      navigate({
-        pathname: `/products/${productIdentifier}`,
-        search: `?cartId=${encodeURIComponent(cartId)}`,
-      });
-    } else {
-      navigate(`/products/${productIdentifier}`);
-    }
+    // Small delay to allow scroll animation to start
+    setTimeout(() => {
+      if (cartId) {
+        navigate({
+          pathname: `/products/${productIdentifier}`,
+          search: `?cartId=${encodeURIComponent(cartId)}`,
+        });
+      } else {
+        navigate(`/products/${productIdentifier}`);
+      }
+    }, 100);
   };
 
   const renderStars = (rating) => {
