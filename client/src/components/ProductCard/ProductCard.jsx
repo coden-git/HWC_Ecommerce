@@ -218,7 +218,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
         <div className="mb-3">
           {product.discountedPrice ? (
             <div className="flex items-baseline space-x-2">
-              <span className="text-xl font-extrabold text-wellness-600">
+              <span className="text-xl font-bold text-wellness-600">
                 {formatPrice(product.discountedPrice)}
               </span>
               <span className="text-sm text-wellness-300 line-through">
@@ -226,7 +226,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
               </span>
             </div>
           ) : (
-            <span className="text-xl font-extrabold text-wellness-700">
+            <span className="text-xl font-bold text-wellness-700">
               {formatPrice(product.price)}
             </span>
           )}
@@ -258,7 +258,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
             <div className="flex items-center bg-green-50 border border-green-600 rounded-lg mb-2 transition-all duration-300 h-12">
               <button
                 type="button"
-                className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 font-bold text-sm"
+                className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors duration-300 font-bold text-sm"
                 onClick={handleDecreaseQuantity}
                 disabled={isUpdatingCart || cartQuantity <= 0}
               >
@@ -269,7 +269,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
               </div>
               <button
                 type="button"
-                className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 font-bold text-sm"
+                className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors duration-300 font-bold text-sm"
                 onClick={handleIncreaseQuantity}
                 disabled={isUpdatingCart}
               >
@@ -279,7 +279,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
           </div>
         ) : (
           <button 
-            className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 text-sm mb-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 text-sm mb-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
             onClick={handleAddToCart}
             disabled={isUpdatingCart}
           >

@@ -1,8 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Card, TopSelling } from '../components';
+import { navigateWithScroll } from '../utils/navigation';
+import { useCart } from '../hooks/useCart';
 import drLathashekarImage from '../assets/Dr lathashekar image.png';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { cartUuid } = useCart();
+
+  const handleShopNowClick = () => {
+    navigateWithScroll(navigate, '/products', cartUuid);
+  };
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -21,7 +30,11 @@ const Home = () => {
               Your journey to better health starts here
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-green-700 hover:bg-green-50">
+              <Button 
+                size="lg" 
+                className="bg-white text-green-700 hover:bg-green-50 cursor-pointer"
+                onClick={handleShopNowClick}
+              >
                 Shop Now
               </Button>
             </div>
@@ -121,7 +134,11 @@ const Home = () => {
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
             Join thousands of satisfied customers who have transformed their health with our premium wellness products.
           </p>
-          <Button size="lg" className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800">
+          <Button 
+            size="lg" 
+            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 cursor-pointer"
+            onClick={handleShopNowClick}
+          >
             Get Started Today
           </Button>
         </div>

@@ -52,7 +52,7 @@ const Header = () => {
             onClick={() => handleNavigation('/')}
             className="flex items-center space-x-2 text-xl font-bold text-gray-800 hover:text-green-600 transition-colors duration-300"
           >
-            <Logo className="h-12 w-auto" />
+            <Logo className="h-13 w-auto" />
           </button>
 
           <div className="flex items-center space-x-4">

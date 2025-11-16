@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProductCard } from '../index';
 import { fetchTopSellingProducts, fetchCartByUuid, getStoredCartUuid } from '../../api/api';
 import TopSellingSkeleton from './TopSellingSkeleton';
+import { navigateWithScroll } from '../../utils/navigation';
 
 const TopSelling = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -69,6 +72,10 @@ const TopSelling = () => {
     }));
   }, []);
 
+  const handleViewAllProducts = () => {
+    navigateWithScroll(navigate, '/products');
+  };
+
   if (loading) {
     return <TopSellingSkeleton />;
   }
@@ -109,7 +116,10 @@ const TopSelling = () => {
         
         {/* View All Button */}
         <div className="text-center">
-          <button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+          <button 
+            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg cursor-pointer"
+            onClick={handleViewAllProducts}
+          >
             View All Products
           </button>
         </div>

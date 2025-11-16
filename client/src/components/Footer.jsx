@@ -5,6 +5,7 @@ import FacebookIcon from './FacebookIcon';
 import YouTubeIcon from './YouTubeIcon';
 import { preserveCartId, navigateWithScroll } from '../utils/navigation';
 import { useCart } from '../hooks/useCart';
+import Logo from './Logo';
 
 const Footer = () => {
   const { cartUuid } = useCart();
@@ -24,12 +25,16 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <span className="text-2xl">🌿</span>
-              <span className="text-xl font-bold">Wellness Co.</span>
+              <span className="text-2xl"><Logo/></span>
+              <span className="text-xl font-bold">Dr Lathshekar Wellness</span>
             </div>
             <p className="text-green-100 mb-4 leading-relaxed">
               Your trusted partner in wellness. We provide premium health products and expert guidance 
               to support your journey to optimal well-being.
+            </p>
+            <p className="text-green-200 text-sm leading-relaxed italic">
+              <strong>Disclaimer:</strong> Products support general wellness and the body's natural healing processes. 
+              Not intended to diagnose, treat, cure, or prevent any disease. Consult a healthcare professional before use.
             </p>
           </div>
           
@@ -82,7 +87,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-green-600 mt-8 pt-8 text-center text-green-100">
-          <p>&copy; 2025 Wellness Co. All rights reserved. Made with 💚 for your health.</p>
+          <p>&copy; 2025 Dr Lathshekar Wellness. All rights reserved. Made with 💚 for your health.</p>
         </div>
       </div>
     </footer>
