@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Home, Products, PrivacyPolicy, TermsOfService, ReturnRefundPolicy, ProductDetails, Cart, ShippingDashboard } from './pages'
+import { Home, Products, PrivacyPolicy, TermsOfService, ReturnRefundPolicy, ShippingPolicy, ProductDetails, Cart, ShippingDashboard } from './pages'
 import { Header, Footer } from './components'
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/return-refund-policy" element={<ReturnRefundPolicy />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/shipping/23466290732-35324234-43242" element={<ShippingDashboard />} />
           </Routes>
