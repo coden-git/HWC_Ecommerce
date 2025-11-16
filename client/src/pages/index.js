@@ -1,5 +1,6 @@
 // Pages barrel export
 export { default as Home } from './Home';
+export { default as Products } from './Products';
 export { default as PrivacyPolicy } from './PrivacyPolicy';
 export { default as TermsOfService } from './TermsOfService';
 export { default as ReturnRefundPolicy } from './ReturnRefundPolicy';

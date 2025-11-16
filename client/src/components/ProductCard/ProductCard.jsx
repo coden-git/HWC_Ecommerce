@@ -152,12 +152,12 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
 
   const handleDecreaseQuantity = useCallback(
     (event) => {
-      if (cartQuantity <= 1) {
+      if (cartQuantity <= 0) {
         event.stopPropagation();
         return;
       }
 
-      const nextQuantity = Math.max(1, cartQuantity - 1);
+      const nextQuantity = Math.max(0, cartQuantity - 1);
       performCartUpdate({
         event,
         nextQuantity,
@@ -175,7 +175,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
       onClick={handleProductClick}
     >
       {/* Product Image Container */}
-      <div className="relative overflow-hidden bg-gray-100 aspect-w-16 aspect-h-9">
+      <div className="relative overflow-hidden bg-wellness-100 aspect-w-16 aspect-h-9">
         <img 
           src={product.primaryImage} 
           alt={product.title}
@@ -203,7 +203,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
       {/* Product Info */}
       <div className="p-4">
         {/* Title */}
-        <h3 className="text-md font-bold text-gray-800 mb-2 line-clamp-2 min-h-[2.8rem]">
+        <h3 className="text-md font-bold text-wellness-800 mb-2 line-clamp-2 min-h-[2.8rem]">
           {product.title}
         </h3>
         
@@ -211,15 +211,15 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
         <div className="mb-3">
           {product.discountedPrice ? (
             <div className="flex items-baseline space-x-2">
-              <span className="text-xl font-extrabold text-green-600">
+              <span className="text-xl font-extrabold text-wellness-600">
                 {formatPrice(product.discountedPrice)}
               </span>
-              <span className="text-sm text-gray-400 line-through">
+              <span className="text-sm text-wellness-300 line-through">
                 {formatPrice(product.price)}
               </span>
             </div>
           ) : (
-            <span className="text-xl font-extrabold text-gray-800">
+            <span className="text-xl font-extrabold text-wellness-700">
               {formatPrice(product.price)}
             </span>
           )}
@@ -230,7 +230,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
           <div className="mb-3">
             <div className="flex items-center">
               <div className="text-sm">{renderStars(product.userRating)}</div>
-              <span className="ml-2 text-xs text-gray-500">({product.userRating.toFixed(1)})</span>
+              <span className="ml-2 text-xs text-wellness-400">({product.userRating.toFixed(1)})</span>
             </div>
           </div>
         )}
@@ -239,7 +239,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
         {feedback && (
           <div
             className={`text-xs font-semibold mb-2 transition-opacity duration-300 ${
-              feedback.type === 'success' ? 'text-green-600' : 'text-red-600'
+              feedback.type === 'success' ? 'text-wellness-600' : 'text-red-600'
             }`}
           >
             {feedback.message}
@@ -247,30 +247,32 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
         )}
 
         {cartQuantity > 0 ? (
-          <div className="flex items-center justify-between bg-blue-50 border-2 border-blue-200 rounded-lg mb-2 transition-all duration-300">
-            <button
-              type="button"
-              className="px-3 py-2 text-blue-800 hover:bg-blue-200 rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              onClick={handleDecreaseQuantity}
-              disabled={isUpdatingCart || cartQuantity <= 1}
-            >
-              −
-            </button>
-            <span className="px-4 py-2 text-sm font-bold text-blue-800">
-              {isUpdatingCart ? 'Updating…' : `Qty: ${cartQuantity}`}
-            </span>
-            <button
-              type="button"
-              className="px-3 py-2 text-blue-800 hover:bg-blue-200 rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              onClick={handleIncreaseQuantity}
-              disabled={isUpdatingCart}
-            >
-              +
-            </button>
+          <div className="space-y-2">
+            <div className="flex items-center bg-green-50 border border-green-600 rounded-lg mb-2 transition-all duration-300 h-12">
+              <button
+                type="button"
+                className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 font-bold text-sm"
+                onClick={handleDecreaseQuantity}
+                disabled={isUpdatingCart || cartQuantity <= 0}
+              >
+                −
+              </button>
+              <div className="flex-1 flex items-center justify-center py-3 px-4 text-sm font-bold text-green-600">
+                {isUpdatingCart ? 'Updating…' : `Qty: ${cartQuantity}`}
+              </div>
+              <button
+                type="button"
+                className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 font-bold text-sm"
+                onClick={handleIncreaseQuantity}
+                disabled={isUpdatingCart}
+              >
+                +
+              </button>
+            </div>
           </div>
         ) : (
           <button 
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl uppercase tracking-wider text-sm mb-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 text-sm mb-2 disabled:opacity-60 disabled:cursor-not-allowed"
             onClick={handleAddToCart}
             disabled={isUpdatingCart}
           >
@@ -280,7 +282,7 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
 
         {/* Purchase Count */}
         {product.numberOfPurchases > 0 && (
-          <div className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full text-center mt-2">
+          <div className="bg-wellness-100 text-wellness-800 text-xs font-semibold px-2.5 py-1 rounded-full text-center mt-2">
             {product.numberOfPurchases} bought in last 24 hours
           </div>
         )}

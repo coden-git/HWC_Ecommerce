@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import { useCart } from '../hooks/useCart';
+import { preserveCartId } from '../utils/navigation';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cartItemCount, cartUuid } = useCart();
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
@@ -12,6 +15,16 @@ const Header = () => {
   const closeMenu = useCallback(() => {
     setIsMenuOpen(false);
   }, []);
+
+  // Generate cart URL with cartId parameter
+  const getCartUrl = useCallback(() => {
+    return preserveCartId('/cart', cartUuid);
+  }, [cartUuid]);
+
+  // Generate navigation URLs with cartId parameter
+  const getNavUrl = useCallback((path) => {
+    return preserveCartId(path, cartUuid);
+  }, [cartUuid]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,47 +42,86 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <Link
-            to="/"
+            to={getNavUrl('/')}
             className="flex items-center space-x-2 text-xl font-bold text-gray-800 hover:text-green-600 transition-colors duration-300"
             onClick={closeMenu}
           >
             <Logo className="h-12 w-auto" />
           </Link>
 
-          <button
-            type="button"
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-green-600 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
-            onClick={toggleMenu}
-            aria-label="Toggle navigation menu"
-            aria-expanded={isMenuOpen}
-          >
-            <span className="sr-only">Open main menu</span>
-            <div className="w-6 h-6 relative">
-              <span className={`absolute h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 top-1/2 -translate-y-1/2' : '-translate-y-1.5 top-0'}`}></span>
-              <span className={`absolute h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100 top-1/2 -translate-y-1/2'}`}></span>
-              <span className={`absolute h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 top-1/2 -translate-y-1/2' : 'translate-y-1.5 bottom-0'}`}></span>
-            </div>
-          </button>
+          <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-2">
+              <Link to={getNavUrl('/')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+                Home
+              </Link>
+              <Link to={getNavUrl('/products')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+                Products
+              </Link>
+              {/* <Link to={getNavUrl('/top-selling')} className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
+                Top Selling
+              </Link> */}
+            </nav>
 
-          <nav className="hidden md:flex items-center space-x-2">
-            <Link to="/" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
-              Home
+            {/* Cart Icon */}
+            <Link
+              to={getCartUrl()}
+              className="relative p-2 text-gray-700 hover:text-green-600 transition-colors duration-300 rounded-lg hover:bg-green-50"
+              aria-label="Shopping cart"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H19M7 13v4a2 2 0 002 2h8a2 2 0 002-2v-4m-8 6h.01M15 19h.01"
+                />
+              </svg>
+              {cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
+                </span>
+              )}
             </Link>
-            <Link to="/privacy-policy" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
-              Privacy Policy
-            </Link>
-            <Link to="/terms-of-service" className="px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50">
-              Terms of Service
-            </Link>
-          </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-green-600 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
+              onClick={toggleMenu}
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMenuOpen}
+            >
+              <span className="sr-only">Open main menu</span>
+              <div className="w-6 h-6 relative">
+                <span className={`absolute h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 top-1/2 -translate-y-1/2' : '-translate-y-1.5 top-0'}`}></span>
+                <span className={`absolute h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen ? 'opacity-0' : 'opacity-100 top-1/2 -translate-y-1/2'}`}></span>
+                <span className={`absolute h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 top-1/2 -translate-y-1/2' : 'translate-y-1.5 bottom-0'}`}></span>
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
         <div className={`transition-all duration-300 ease-in-out md:hidden ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
           <nav className="py-2">
-            <Link to="/" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Home</Link>
-            <Link to="/privacy-policy" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Privacy Policy</Link>
-            <Link to="/terms-of-service" className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Terms of Service</Link>
+            <Link to={getNavUrl('/')} className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Home</Link>
+            <Link to={getNavUrl('/products')} className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Products</Link>
+            {/* <Link to={getNavUrl('/top-selling')} className="block px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>Top Selling</Link> */}
+            <Link to={getCartUrl()} className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-green-600 font-medium transition-colors duration-300 rounded-lg hover:bg-green-50" onClick={closeMenu}>
+              <span>Cart</span>
+              {cartItemCount > 0 && (
+                <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
+                </span>
+              )}
+            </Link>
           </nav>
         </div>
       </div>

@@ -442,21 +442,21 @@ const Cart = () => {
                       )}
                     </div>
 
-                    <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-3 py-1">
+                    <div className="flex items-center gap-2 bg-green-50 border border-green-600 rounded-full px-3 py-1">
                       <button
                         type="button"
-                        className="text-blue-700 text-lg leading-none disabled:opacity-40"
+                        className="text-green-600 text-lg leading-none disabled:opacity-40"
                         onClick={() => handleQuantityUpdate(item.productUuid, item.quantity - 1)}
                         disabled={isUpdating || item.quantity <= 1}
                       >
                         −
                       </button>
-                      <span className="text-sm font-semibold text-blue-700 min-w-[2rem] text-center">
+                      <span className="text-sm font-semibold text-green-600 min-w-[2rem] text-center">
                         {isUpdating ? '…' : item.quantity}
                       </span>
                       <button
                         type="button"
-                        className="text-blue-700 text-lg leading-none disabled:opacity-40"
+                        className="text-green-600 text-lg leading-none disabled:opacity-40"
                         onClick={() => handleQuantityUpdate(item.productUuid, item.quantity + 1)}
                         disabled={isUpdating}
                       >
@@ -525,21 +525,86 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-50">
       <Breadcrumb items={breadcrumbItems} preserveCartId />
 
-      <section className="border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-blue-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-500">
+      <section className="border-b border-green-200 bg-gradient-to-r from-green-50 via-white to-green-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <span className="text-xs font-semibold uppercase tracking-[0.1em] text-green-600">
             Secure checkout
           </span>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">
-            Review your order
-          </h1>
-          <p className="mt-4 text-gray-600 max-w-2xl">
-            Make sure everything looks correct before heading to checkout. You can update quantities or remove items below.
+          <p className="mt-1 text-gray-600 max-w-2xl">
+            Review your order before checkout.
           </p>
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Mobile Order Summary - Show right after "Review your order before checkout" */}
+      <div className="lg:hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Order summary</h2>
+
+          <div className="space-y-3 text-sm text-gray-600">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>₹{totals.subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Savings</span>
+              <span className="text-green-600">− ₹{totals.discount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Items</span>
+              <span>{totals.items}</span>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 my-4" />
+
+          <div className="flex justify-between items-center text-lg font-semibold text-gray-900">
+            <span>Total due today</span>
+            <span>₹{totals.total.toFixed(2)}</span>
+          </div>
+
+          <p className="mt-2 text-xs text-gray-500">
+            Shipping and taxes calculated at the next step.
+          </p>
+
+          {checkoutStatus.success && (
+            <div className="mt-4 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600">
+                  <svg
+                    aria-hidden="true"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-7.25 9.5a.75.75 0 0 1-1.118.07l-4-4a.75.75 0 1 1 1.06-1.06l3.362 3.361 6.72-8.81a.75.75 0 0 1 1.083-.113Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-base font-semibold text-green-700">
+                    Thank you! Your order has been placed successfully.
+                  </p>
+                  <p className="leading-relaxed">
+                    Use this order ID if you ever need to reach out about your purchase:
+                    <span className="ml-2 inline-flex items-center gap-2 rounded-lg bg-white px-3 py-1 font-mono text-sm text-green-800 shadow">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-green-500">Order ID</span>
+                      <span>{cart?.orderNumber || 'N/A'}</span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <p className="mt-4 text-xs text-gray-500 text-center">
+            Secure payments powered by Stripe · 30-day money back guarantee
+          </p>
+        </div>
+      </div>      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             {renderCartItems()}
@@ -847,26 +912,24 @@ const Cart = () => {
               </div>
             </div>
 
-            <div className="bg-white border border-blue-100 rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Need help with your order?</h3>
-                <p className="text-sm text-gray-500">Our wellness specialists can help you pick the perfect plan.</p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button variant="secondary" onClick={() => navigate('/products')}>
-                  Continue Shopping
-                </Button>
-                <a
-                  href="tel:+1800123456"
-                  className="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg border border-blue-500 text-blue-600 hover:bg-blue-50 transition"
-                >
-                  Talk to us
-                </a>
-              </div>
+            {/* Mobile Checkout Button - Show after address filling */}
+            <div className="lg:hidden">
+              <Button
+                variant="primary"
+                className="w-full"
+                onClick={handleProceedToCheckout}
+                disabled={!canProceedToCheckout || checkoutStatus.loading || checkoutStatus.success}
+              >
+                {checkoutStatus.loading ? 'Processing…' : checkoutStatus.success ? 'Order placed' : 'Proceed to checkout'}
+              </Button>
+
+              {checkoutStatus.error && (
+                <p className="mt-2 text-sm text-red-500 text-center">{checkoutStatus.error}</p>
+              )}
             </div>
           </div>
 
-          <aside className="lg:col-span-1">
+          <aside className="hidden lg:block lg:col-span-1">
             <div className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm sticky top-24">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Order summary</h2>
 
@@ -947,7 +1010,25 @@ const Cart = () => {
               </p>
             </div>
 
-            <div className="mt-6 bg-blue-50 border border-blue-100 rounded-2xl p-5 text-sm text-blue-700 space-y-2">
+            <div className="mt-6 bg-white border border-green-200 rounded-2xl p-6 flex flex-col gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Need help with your order?</h3>
+                <p className="text-sm text-gray-500">Our wellness specialists can help you pick the perfect plan.</p>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Button variant="secondary" onClick={() => navigate('/products')}>
+                  Continue Shopping
+                </Button>
+                <a
+                  href="tel:+1800123456"
+                  className="inline-flex items-center justify-center px-6 py-3 text-base font-bold rounded-lg bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white transition-all duration-300"
+                >
+                  Talk to us
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-6 bg-green-50 border border-green-200 rounded-2xl p-5 text-sm text-green-700 space-y-2">
               <p className="font-medium">Did you know?</p>
               <p>Most customers start feeling the difference within 2 weeks. Consistency is key to lasting results.</p>
             </div>
