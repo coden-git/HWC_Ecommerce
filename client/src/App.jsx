@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Home, PrivacyPolicy, TermsOfService, ReturnRefundPolicy, ProductDetails, Cart, ShippingDashboard } from './pages'
+import { Home, Products, PrivacyPolicy, TermsOfService, ReturnRefundPolicy, ProductDetails, Cart, ShippingDashboard } from './pages'
 import { Header, Footer } from './components'
 
 function App() {
@@ -12,6 +12,7 @@ function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
             <Route path="/products/:identifier" element={<ProductDetails />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />

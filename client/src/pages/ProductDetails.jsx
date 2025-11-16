@@ -15,6 +15,7 @@ const ProductDetails = () => {
   const [isBuyNowLoading, setIsBuyNowLoading] = useState(false);
   const [isSyncingQuantity, setIsSyncingQuantity] = useState(false);
   const [addToCartFeedback, setAddToCartFeedback] = useState(null);
+  const [cartQuantity, setCartQuantity] = useState(0);
   const addToCartFeedbackTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -72,6 +73,9 @@ const ProductDetails = () => {
 
         if (cartProduct?.quantity && cartProduct.quantity > 0) {
           setQuantity(cartProduct.quantity);
+          setCartQuantity(cartProduct.quantity);
+        } else {
+          setCartQuantity(0);
         }
       } catch (err) {
         console.error('Error syncing product quantity from cart:', err);
@@ -205,6 +209,7 @@ const ProductDetails = () => {
 
         if (typeof updatedQuantity === 'number' && updatedQuantity > 0) {
           setQuantity(updatedQuantity);
+          setCartQuantity(updatedQuantity);
         }
       } catch (err) {
         console.error('Error updating cart quantity:', err);
@@ -237,6 +242,15 @@ const ProductDetails = () => {
   const handleAddToCart = async () => {
     if (!product || isAddingToCart) return;
 
+    // If product is already in cart, navigate to cart
+    if (cartQuantity > 0) {
+      const cartUuid = getStoredCartUuid();
+      if (cartUuid) {
+        navigate(`/cart?cartId=${encodeURIComponent(cartUuid)}`);
+        return;
+      }
+    }
+
     try {
       setIsAddingToCart(true);
       const response = await addProductToCart({
@@ -248,6 +262,7 @@ const ProductDetails = () => {
 
       if (typeof updatedQuantity === 'number' && updatedQuantity > 0) {
         setQuantity(updatedQuantity);
+        setCartQuantity(updatedQuantity);
       }
 
       setAddToCartFeedbackMessage('success', 'Added to cart');
@@ -275,6 +290,7 @@ const ProductDetails = () => {
 
       if (typeof updatedQuantity === 'number' && updatedQuantity > 0) {
         setQuantity(updatedQuantity);
+        setCartQuantity(updatedQuantity);
       }
 
       const cartUuid =
@@ -434,21 +450,23 @@ const ProductDetails = () => {
 
             {/* Quantity Selector */}
             <div className="border-t border-gray-200 pt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 Quantity
               </label>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center bg-green-50 border border-green-600 rounded-lg transition-all duration-300 h-12 max-w-xs">
                 <button
                   onClick={() => handleQuantityChange(-1)}
-                  className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-blue-600 flex items-center justify-center hover:bg-blue-50 transition-all duration-200 text-gray-600 hover:text-blue-600 font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 font-bold text-lg"
                   disabled={quantity <= 1 || isSyncingQuantity}
                 >
-                  -
+                  −
                 </button>
-                <span className="text-lg font-medium w-8 text-center">{quantity}</span>
+                <div className="flex-1 flex items-center justify-center py-3 px-4 text-lg font-bold text-green-600">
+                  {isSyncingQuantity ? 'Updating…' : quantity}
+                </div>
                 <button
                   onClick={() => handleQuantityChange(1)}
-                  className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-blue-600 flex items-center justify-center hover:bg-blue-50 transition-all duration-200 text-gray-600 hover:text-blue-600 font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 font-bold text-lg"
                   disabled={isSyncingQuantity}
                 >
                   +
@@ -472,15 +490,15 @@ const ProductDetails = () => {
                 className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isAddingToCart || isSyncingQuantity}
               >
-                {isAddingToCart || isSyncingQuantity ? 'Updating…' : 'Add to Cart'}
+                {isAddingToCart || isSyncingQuantity ? 'Updating…' : cartQuantity > 0 ? 'Go to Cart' : 'Add to Cart'}
               </button>
-              <button
+              {/* <button
                 onClick={handleBuyNow}
                 className="w-full bg-green-50 border-2 border-green-600 text-green-600 hover:bg-green-100 font-bold py-4 px-6 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isBuyNowLoading}
               >
                 {isBuyNowLoading ? 'Redirecting…' : 'Buy Now'}
-              </button>
+              </button> */}
             </div>
 
             {/* Benefits */}

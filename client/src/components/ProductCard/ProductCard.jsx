@@ -152,12 +152,12 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
 
   const handleDecreaseQuantity = useCallback(
     (event) => {
-      if (cartQuantity <= 1) {
+      if (cartQuantity <= 0) {
         event.stopPropagation();
         return;
       }
 
-      const nextQuantity = Math.max(1, cartQuantity - 1);
+      const nextQuantity = Math.max(0, cartQuantity - 1);
       performCartUpdate({
         event,
         nextQuantity,
@@ -248,26 +248,12 @@ const ProductCard = ({ product, index, initialQuantity = 0, onQuantityChange }) 
 
         {cartQuantity > 0 ? (
           <div className="space-y-2">
-            <button 
-              className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
-              onClick={(event) => {
-                event.stopPropagation();
-                const cartId = new URLSearchParams(location.search || '').get('cartId');
-                if (cartId) {
-                  navigate(`/cart?cartId=${encodeURIComponent(cartId)}`);
-                } else {
-                  navigate('/cart');
-                }
-              }}
-            >
-              Go to Cart
-            </button>
             <div className="flex items-center bg-green-50 border border-green-600 rounded-lg mb-2 transition-all duration-300 h-12">
               <button
                 type="button"
                 className="px-4 py-3 text-green-600 hover:bg-green-100 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 font-bold text-sm"
                 onClick={handleDecreaseQuantity}
-                disabled={isUpdatingCart || cartQuantity <= 1}
+                disabled={isUpdatingCart || cartQuantity <= 0}
               >
                 −
               </button>

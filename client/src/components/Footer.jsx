@@ -3,8 +3,15 @@ import { Link } from 'react-router-dom';
 import InstagramIcon from './InstagramIcon';
 import FacebookIcon from './FacebookIcon';
 import YouTubeIcon from './YouTubeIcon';
+import { preserveCartId } from '../utils/navigation';
+import { useCart } from '../hooks/useCart';
 
 const Footer = () => {
+  const { cartUuid } = useCart();
+
+  // Helper function to preserve cart ID for internal links
+  const getNavUrl = (path) => preserveCartId(path, cartUuid);
+
   return (
     <footer className="bg-gradient-to-r from-green-800 to-emerald-900 text-white mt-auto">
       <div className="container mx-auto px-4 py-12">
@@ -24,7 +31,7 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-green-200">
               <li><a href="https://www.drlathashekhar.com/profile.php" className="hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Products</a></li>
+              <li><Link to={getNavUrl('/products')} className="hover:text-white transition-colors">Products</Link></li>
               <li><a href="https://www.drlathashekhar.com/blog.php" className="hover:text-white transition-colors">Blog</a></li>
               <li><a href="https://www.drlathashekhar.com/contact.php" className="hover:text-white transition-colors">Contact</a></li>
             </ul>
@@ -34,18 +41,18 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Legal</h3>
             <ul className="space-y-2 text-green-200">
               <li>
-                <Link to="/privacy-policy" className="hover:text-white transition-colors">
+                <Link to={getNavUrl('/privacy-policy')} className="hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms-of-service" className="hover:text-white transition-colors">
+                <Link to={getNavUrl('/terms-of-service')} className="hover:text-white transition-colors">
                   Terms of Service
                 </Link>
               </li>
               {/* <li><a href="#" className="hover:text-white transition-colors">Shipping Policy</a></li> */}
               <li>
-                <Link to="/return-refund-policy" className="hover:text-white transition-colors">
+                <Link to={getNavUrl('/return-refund-policy')} className="hover:text-white transition-colors">
                   Return Policy
                 </Link>
               </li>

@@ -78,6 +78,8 @@ export const addProductToCart = async ({ productId, quantity = 1 }) => {
 
   if (data?.success && data?.data?.cartUuid) {
     storeCartUuid(data.data.cartUuid);
+    // Trigger cart update event
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
   }
 
   return data;
@@ -103,6 +105,27 @@ export const fetchCartByUuid = async (uuid) => {
   const response = await api.get(`${apiUrl}/cart/${uuid}`);
 
   return response.data;
+};
+
+export const getCartItemCount = async () => {
+  try {
+    const cartUuid = getStoredCartUuid();
+    if (!cartUuid) {
+      return 0;
+    }
+
+    const cartData = await fetchCartByUuid(cartUuid);
+    if (cartData?.success && cartData?.data) {
+      return cartData.data.products?.reduce(
+        (total, product) => total + (product.quantity || 0),
+        0
+      ) || 0;
+    }
+    return 0;
+  } catch (error) {
+    console.error('Error getting cart item count:', error);
+    return 0;
+  }
 };
 
 export const fetchCarts = async ({

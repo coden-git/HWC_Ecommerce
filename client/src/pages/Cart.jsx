@@ -536,7 +536,75 @@ const Cart = () => {
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Mobile Order Summary - Show right after "Review your order before checkout" */}
+      <div className="lg:hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Order summary</h2>
+
+          <div className="space-y-3 text-sm text-gray-600">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>₹{totals.subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Savings</span>
+              <span className="text-green-600">− ₹{totals.discount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Items</span>
+              <span>{totals.items}</span>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 my-4" />
+
+          <div className="flex justify-between items-center text-lg font-semibold text-gray-900">
+            <span>Total due today</span>
+            <span>₹{totals.total.toFixed(2)}</span>
+          </div>
+
+          <p className="mt-2 text-xs text-gray-500">
+            Shipping and taxes calculated at the next step.
+          </p>
+
+          {checkoutStatus.success && (
+            <div className="mt-4 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600">
+                  <svg
+                    aria-hidden="true"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-7.25 9.5a.75.75 0 0 1-1.118.07l-4-4a.75.75 0 1 1 1.06-1.06l3.362 3.361 6.72-8.81a.75.75 0 0 1 1.083-.113Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-base font-semibold text-green-700">
+                    Thank you! Your order has been placed successfully.
+                  </p>
+                  <p className="leading-relaxed">
+                    Use this order ID if you ever need to reach out about your purchase:
+                    <span className="ml-2 inline-flex items-center gap-2 rounded-lg bg-white px-3 py-1 font-mono text-sm text-green-800 shadow">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-green-500">Order ID</span>
+                      <span>{cart?.orderNumber || 'N/A'}</span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <p className="mt-4 text-xs text-gray-500 text-center">
+            Secure payments powered by Stripe · 30-day money back guarantee
+          </p>
+        </div>
+      </div>      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             {renderCartItems()}
@@ -843,9 +911,25 @@ const Cart = () => {
                 )}
               </div>
             </div>
+
+            {/* Mobile Checkout Button - Show after address filling */}
+            <div className="lg:hidden">
+              <Button
+                variant="primary"
+                className="w-full"
+                onClick={handleProceedToCheckout}
+                disabled={!canProceedToCheckout || checkoutStatus.loading || checkoutStatus.success}
+              >
+                {checkoutStatus.loading ? 'Processing…' : checkoutStatus.success ? 'Order placed' : 'Proceed to checkout'}
+              </Button>
+
+              {checkoutStatus.error && (
+                <p className="mt-2 text-sm text-red-500 text-center">{checkoutStatus.error}</p>
+              )}
+            </div>
           </div>
 
-          <aside className="lg:col-span-1">
+          <aside className="hidden lg:block lg:col-span-1">
             <div className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm sticky top-24">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Order summary</h2>
 
