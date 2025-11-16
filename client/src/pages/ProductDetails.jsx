@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { addProductToCart, fetchCartByUuid, getStoredCartUuid, fetchProductDetails } from '../api/api';
 import { Breadcrumb } from '../components';
+import { navigateWithScroll } from '../utils/navigation';
 
 const ProductDetails = () => {
   const { identifier } = useParams();
@@ -246,7 +247,7 @@ const ProductDetails = () => {
     if (cartQuantity > 0) {
       const cartUuid = getStoredCartUuid();
       if (cartUuid) {
-        navigate(`/cart?cartId=${encodeURIComponent(cartUuid)}`);
+        navigateWithScroll(navigate, `/cart?cartId=${encodeURIComponent(cartUuid)}`, null, false);
         return;
       }
     }
@@ -297,7 +298,7 @@ const ProductDetails = () => {
         response?.data?.cartUuid || response?.data?.cart?.uuid || getStoredCartUuid();
 
       if (cartUuid) {
-        navigate(`/cart?cartId=${encodeURIComponent(cartUuid)}`);
+        navigateWithScroll(navigate, `/cart?cartId=${encodeURIComponent(cartUuid)}`, null, false);
       } else {
         setAddToCartFeedbackMessage('success', 'Added to cart');
       }
@@ -328,7 +329,7 @@ const ProductDetails = () => {
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center max-w-md">
           <p className="text-red-600 text-lg mb-4">{error}</p>
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => navigateWithScroll(navigate, '/')}
             className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg uppercase tracking-wide"
           >
             Go Back Home
