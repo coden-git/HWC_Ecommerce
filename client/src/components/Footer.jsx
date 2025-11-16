@@ -61,7 +61,11 @@ const Footer = () => {
                   Terms of Service
                 </button>
               </li>
-              {/* <li><a href="#" className="hover:text-white transition-colors">Shipping Policy</a></li> */}
+              <li>
+                <button onClick={() => handleNavigation('/shipping-policy')} className="hover:text-white transition-colors text-left">
+                  Shipping Policy
+                </button>
+              </li>
               <li>
                 <button onClick={() => handleNavigation('/return-refund-policy')} className="hover:text-white transition-colors text-left">
                   Return Policy
