@@ -1,5 +1,9 @@
 const fs = require('fs')
 const path = require('path')
+const { StandardCheckoutClient, Env, StandardCheckoutPayRequest } = require('pg-sdk-node');
+const Product = require('./products/product.model');
+const { randomUUID } = require('crypto');
+
 
 exports.createUploadFolderIfNotExists = () => {
   const folderPath = path.join(__dirname, './uploads');
@@ -105,3 +109,53 @@ exports.deleteFile = async (path) => {
     throw err;
   }
 };
+
+ const getPaymentClient = ()=>{
+    const clientId = process.env.PHONE_PAY_MERCHANT_ID;
+    const clientSecret = process.env.PHONE_PAY;
+    const clientVersion = 1;  //insert your client version here
+    const env = Env.SANDBOX;      //change to Env.PRODUCTION when you go live
+    
+    const phonePeClient = StandardCheckoutClient.getInstance(clientId, clientSecret, clientVersion, env);
+    return phonePeClient
+  }
+
+  exports.getPaymentEnum = (status) => {
+    const PaymentStatus = {
+        INIT: "INIT",
+        COMPLETED: "SUCCESS",
+        FAILED: "FAILED",
+        CANCELLED: "CANCELLED",
+        PENDING: "PENDING"
+    }
+    return PaymentStatus[status] || PaymentStatus.INIT
+}
+
+exports.initiatePayment = async ({rate}) => {
+  const paymentId = randomUUID();
+  const redirectUrl = `http://localhost:5173/payment-status/${paymentId}`;
+
+  const request = StandardCheckoutPayRequest.builder()
+        .merchantOrderId(paymentId)
+        .amount(rate*100)
+        .redirectUrl(redirectUrl)
+        .build();
+  const phonePeClient = getPaymentClient()
+  const response = await phonePeClient.pay(request);
+      const checkoutPageUrl = response.redirectUrl;
+      console.log(checkoutPageUrl);
+
+    return { checkoutPageUrl, paymentId }
+    
+}
+
+exports.checkStatus= async({ paymentId })=> {
+  try {
+    const client = getPaymentClient();
+    const response = await client.getTransactionStatus(paymentId);
+
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
+}

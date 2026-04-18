@@ -44,6 +44,17 @@ const getCartByUuidSchema = Joi.object({
     })
 });
 
+const getPaymentStatusSchema = Joi.object({
+  uuid: Joi.string()
+    .uuid()
+    .required()
+    .messages({
+      'string.empty': 'payment id is required',
+      'any.required': 'payment id is required',
+      'string.uuid': 'payment id must be a valid UUID format'
+    })
+});
+
 const addressSchema = Joi.object({
   addressLine1: Joi.string().trim().max(200).required().messages({
     'string.empty': 'Address line 1 is required',
@@ -111,4 +122,5 @@ module.exports = {
   checkoutCartBodySchema,
   checkoutCartParamsSchema,
   listCartsQuerySchema,
+  getPaymentStatusSchema
 };

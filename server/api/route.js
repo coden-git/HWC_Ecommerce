@@ -13,7 +13,8 @@ const {
   getCartByUuidSchema,
   checkoutCartBodySchema,
   checkoutCartParamsSchema,
-  listCartsQuerySchema
+  listCartsQuerySchema,
+  getPaymentStatusSchema,
 } = require('./cart/cart.validator');
 
 // Import postal modules
@@ -130,6 +131,11 @@ router.get('/cart/:uuid/dispatch',
 router.get('/cart/:uuid',
   validateRequest(getCartByUuidSchema, 'params'),
   cartController.getCartByUuid
+);
+
+router.get('/payment-status/:uuid',
+  validateRequest(getPaymentStatusSchema, 'params'),
+  cartController.getPaymentStatus
 );
 
 // Postal utility routes

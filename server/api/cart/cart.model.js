@@ -150,6 +150,20 @@ const cartSchema = new mongoose.Schema({
   billingAddress: {
     type: addressSchema,
     required: false
+  },
+  paymentId: {
+    type: String,
+    required: false,
+    trim: true
+  },
+  paymentStatus: {
+    type: String,
+    required: false,    
+    enum: ['INIT', 'COMPLETED', 'FAILED', 'PENDING'],
+  },
+  paymentDetails: {
+    type: mongoose.Schema.Types.Mixed,
+    required: false
   }
 }, {
   timestamps: true, // This automatically adds createdAt and updatedAt fields

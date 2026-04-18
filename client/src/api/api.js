@@ -243,3 +243,12 @@ export const fetchProductDetails = async (identifier) => {
 
   return response.data;
 };
+
+export const getPaymentStatus = async (paymentId) => {
+  if (!paymentId) {
+    throw new Error('Payment ID is required to check payment status');
+  }
+  const apiUrl = getApiBaseUrl();
+  const response = await api.get(`${apiUrl}/payment-status/${paymentId}`);
+  return response.data;
+};

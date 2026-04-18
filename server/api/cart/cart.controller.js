@@ -1,6 +1,7 @@
 const Cart = require('./cart.model');
 const Product = require('../products/product.model');
 const Config = require('../config/config.model');
+const { initiatePayment, checkStatus } = require('../utils');
 
 /**
  * Add product to cart
@@ -185,11 +186,15 @@ const checkoutCart = async (req, res) => {
 
     cart.shippingAddress = shippingAddress;
     cart.billingAddress = billingAddress || shippingAddress;
-    cart.cartStatus = 'PLACED';
+    cart.cartStatus = 'CHECKOUT';
     const config = await Config.getValue('orderId', 0);
     cart.orderNumber = `ORD-${config + 1}`;
     cart.name =shippingAddress?.name || '';
     cart.number =shippingAddress?.phoneNumber || '';
+    
+    const { checkoutPageUrl, paymentId } = await initiatePayment({rate: cart.totalValue});
+    cart.paymentId = paymentId;
+    cart.paymentStatus = 'INIT'
 
     await Config.setValue('orderId', config + 1);
 
@@ -198,7 +203,7 @@ const checkoutCart = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: 'Cart checked out successfully',
-      data: cart,
+      data: {...cart.toObject(), checkoutPageUrl },
     });
   } catch (error) {
     console.error('Checkout cart error:', error);
@@ -207,6 +212,34 @@ const checkoutCart = async (req, res) => {
       success: false,
       message: 'Failed to checkout cart',
       error: error.message,
+    });
+  }
+};
+
+const getPaymentStatus = async (req, res) => {
+  try {
+    const { uuid } = req.params;
+    let success = true
+    const cart = await Cart.findOne({ paymentId: uuid });
+    if(cart && cart.paymentStatus === 'INIT') {
+      const paymentStatus = await checkStatus({ paymentId: uuid });
+      console.log('Payment status:', paymentStatus);
+      cart.paymentStatus = paymentStatus.state;
+      cart.paymentDetails = paymentStatus;
+      cart.cartStatus = paymentStatus.state === 'COMPLETED' ? 'PLACED' : 'FAILED';
+      success = paymentStatus.state === 'COMPLETED';
+    }
+    await cart.save();
+    return res.status(200).json({
+      success,
+      message: 'Payment status retrieved successfully',
+    });
+  } catch (error) {
+    console.error('Get payment status error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve payment status',
+      error: error.message
     });
   }
 };
@@ -355,4 +388,5 @@ module.exports = {
   checkoutCart,
   getCarts,
   dispatchCart,
+  getPaymentStatus
 };

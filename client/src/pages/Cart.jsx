@@ -7,6 +7,7 @@ import {
   checkoutCart as checkoutCartApi,
 } from '../api/api';
 import { Breadcrumb, Button } from '../components';
+import { use } from 'react';
 
 const initialAddressState = {
   name: '',
@@ -356,6 +357,10 @@ const Cart = () => {
 
       setCheckoutStatus({ loading: false, error: null, success: true });
       setCart(response.data);
+      const checkooutPageUrl = response.data.checkoutPageUrl;
+      if (checkooutPageUrl) {
+        window.location.href = checkooutPageUrl;
+      }
     } catch (err) {
       const message =
         err?.response?.data?.message || err?.message || 'Unable to complete checkout.';
